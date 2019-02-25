@@ -30,6 +30,10 @@ func (e *Engine)Run(seeds ...Request){
 				log.Printf("fetch url error url is %s ,error is  %v\n", r.Url, err)
 				continue
 			}
+			if contents == "" {
+				log.Printf("contents error url is %s ,error is  %v\n", r.Url, err)
+				continue
+			}
 			//2.2 解析
 			result := r.ParserFunc(contents)
 

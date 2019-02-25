@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"house_spider/engine"
 	"house_spider/house/model"
+	"house_spider/store"
 	"regexp"
 	"strconv"
 )
@@ -40,6 +41,7 @@ func ParserHouse(contents string)engine.RequestResult{
 	res.R = append(res.R,engine.Request{})
 	res.Items = house
 	fmt.Printf("房源信息：%+v \n",house)
+	store.Save(house) //存储
 	return res
 }
 

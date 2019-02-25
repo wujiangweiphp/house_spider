@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{.Title}}</title>
+    <link href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .msgtype {
+            width: 80%;
+            margin: 20px auto
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row msgtype">
+        {{.Title}}
+    </div>
+    <div class="row msgtype">
+        <!-- 搜索留言  -->
+        <div id="search" class="col-10">
+            <form class="form-inline" autocapitalize="off" onsubmit="return false;">
+                <div class="form-group">
+                    <label for="search-input">租房信息：</label>
+                    <input type="text" class="form-control" id="search-input" placeholder="" />
+                </div>
+                <a class="btn btn-default" id="seatch-btn">搜索</a>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- 内容区域 -->
+    <div id="content">
+
+    </div>
+    <!-- 页码区域 -->
+    <div id="page" class="page">
+
+    </div>
+</div>
+<script type="text/javascript" src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!--JS部分-->
+<script type="text/javascript">
+
+    let InitSearch = window.InitSearch || {
+        page: 0,
+        current_page: 0,
+        init: function () {
+            const _that = this;
+            // 给搜索按钮 添加事件
+            $("#seatch-btn").click(function () {
+                let content = $("#search-input").val();
+                _that.list(1, content, true);
+            });
+            $('#search-input').keyup(function (e) {
+                $('#seatch-btn').click();
+            });
+            _that.list(1, '', true)
+        },
+        list: function (page, content, init) {
+            const _that = this;
+            content = content || "";
+            $.ajax({
+                type: 'GET',
+                url: '/search',
+                data: {
+                    "keyword": content,
+                    "limit": 10,
+                    "page": page
+                },
+                success: function (result) {
+                    if (result.length == 0) {
+                        $("#content").html("");
+                    } else {
+                        $("#content").html(_that.conbinHtml(result));
+                    }
+                }
+            })
+        },
+        conbinHtml: function (list) {
+            let html_code = "<table class=\"table table-striped\">";
+            html_code += "<tr>";
+            html_code += "<th>房屋编号</th>";
+            html_code += "<th>所在小区</th>";
+            html_code += "<th>租金</th>";
+            html_code += "<th>发布日期</th>";
+            html_code += "</div>";
+            for (let i in list) {
+                html_code += "<tr>";
+                html_code += "<td>" + list[i].HouseNo + "</td>";
+                html_code += "<td class='content'>" + list[i].BuildingName + "</td>";
+                html_code += "<td>" + list[i].Price + "</td>";
+                html_code += "<td>" + list[i].PublicTime + "</td>";
+                html_code += "</div>";
+            }
+            html_code += "</table>"
+            return html_code
+        }
+    };
+
+    // 初始化
+    $(function () {
+        InitSearch.init();
+    })
+
+</script>
+</body>
+</html>

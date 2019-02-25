@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-var tick = time.Tick(time.Millisecond * 100)
+var tick = time.Tick(time.Millisecond * 1000)
 
 /**
   根据提供的url 获取返回信息内容
